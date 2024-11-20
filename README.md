@@ -9,9 +9,9 @@
  如果大家不想编译，可以使用从发布版中下载我已经编译好的agent包和cli包
 
 功能说明:如下图，除了按照IP或者其他规则划分覆盖率和精确标记部分分支覆盖功能，过滤通过反射获取到的JacocoData功能，其他功能均已经开源，具体使用说明可以看看wiki，这里不再描述
- 
-![输入图片说明](image.png)
 
+![输入图片说明](image22.png)
+ 
 编译方法:已经去掉了一些不必要的模块和插件，直接执行mvn命令:mvn clean install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true
 使用方法:
 
