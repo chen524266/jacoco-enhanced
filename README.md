@@ -1,13 +1,18 @@
 ### 简介
  
  最新版本支持自定义数据结构，如请求者IP，以IP划分探针数据，此版本暂时不考虑开源，需付费支持。
+
  
- 基于ray大佬的分支二开，感谢大佬的无私奉献。jacoco二开，增量覆盖率和不同时间节点的不同class代码覆盖率合并功能。
+ 基于ray大佬的分支二开，感谢ray佬的无私奉献。jacoco二开，增量覆盖率和不同时间节点的不同class代码覆盖率合并功能。
  思路请参考博文https://blog.csdn.net/qq_34418450/article/details/135386280?spm=1001.2014.3001.5501
  这里不再赘述。
  如果大家不想编译，可以使用从发布版中下载我已经编译好的agent包和cli包
+
+功能说明:如下图，除了按照IP或者其他规则划分覆盖率和精确标记部分分支覆盖功能，过滤通过反射获取到的JacocoData功能，其他功能均已经开源，具体使用说明可以看看wiki，这里不再描述
  
- 编译方法:已经去掉了一些不必要的模块和插件，直接执行mvn命令:mvn clean install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true
+![输入图片说明](image.png)
+
+编译方法:已经去掉了一些不必要的模块和插件，直接执行mvn命令:mvn clean install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true
 使用方法:
 
 --diffcode是增量统计，不带则统计全量。可以自己生成这个数据，或者使用ray开源的https://gitee.com/Dray/code-diff获取，支持传入文件参数--diffCodeFiles
