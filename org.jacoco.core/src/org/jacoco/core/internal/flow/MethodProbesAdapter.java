@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.jacoco.core.internal.flow;
 
+import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -193,4 +195,25 @@ public final class MethodProbesAdapter extends MethodVisitor {
 		return FrameSnapshot.create(analyzer, popCount);
 	}
 
+    @Override
+    public void visitMethodInsn(int opcode, String owner, String methodName,
+                                String methodDescriptor, boolean isInterface) {
+        if (owner.equals("java/lang/Class") && methodName.equals("getDeclaredFields")
+                && methodDescriptor.equals("()[Ljava/lang/reflect/Field;")) {
+            super.visitMethodInsn(Opcodes.INVOKESTATIC,
+                    "org/jacoco/core/internal/flow/MethodProbesAdapter",
+                    "getDeclaredFields",
+                    "(Ljava/lang/Class;)[Ljava/lang/reflect/Field;",
+                    false);
+        } else {
+            super.visitMethodInsn(opcode, owner, methodName, methodDescriptor, isInterface);
+        }
+    }
+
+    public static Field[] getDeclaredFields(Class<?> clazz) {
+        Field[] fields = clazz.getDeclaredFields();
+        return Arrays.stream(fields)
+                .filter(f -> !f.isSynthetic())
+                .toArray(Field[]::new);
+    }
 }
