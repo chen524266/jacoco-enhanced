@@ -185,9 +185,6 @@ public class ClassAnalyzer extends ClassProbesVisitor
                                 break;
                             }
                         }
-                        if (coverage.getName().contains("ProjectPageObjectController")){
-                            System.out.println("ClassAnalyzer.accept");
-                        }
                         // 同一个方法
                         if (isSameMethod) {
                             //合并exec新方案--直接合并两个probes对应的探针
