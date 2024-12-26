@@ -56,9 +56,9 @@ public class MethodAnalyzer extends MethodProbesVisitor {
         methodVisitor.visitCode();
         for (final TryCatchBlockNode n : methodNode.tryCatchBlocks) {
             currentNo++;
-            n.accept(methodVisitor);
             currentProbeId = ((MethodProbesAdapter) methodVisitor)
                     .getIdGenerator().getId();
+            n.accept(methodVisitor);
         }
         // 依次遍历的method的instructions，type一样且顺序一样，则判断为同一个
         for (final AbstractInsnNode i : methodNode.instructions) {
