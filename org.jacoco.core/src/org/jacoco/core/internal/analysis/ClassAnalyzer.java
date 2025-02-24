@@ -132,9 +132,9 @@ public class ClassAnalyzer extends ClassProbesVisitor
             public void accept(final MethodNode methodNode,
                                final MethodVisitor methodVisitor) {
                 // 统计method的方法体的指令级别覆盖率，指令级别需要关注的是braches和coverbraches，line代码合并不需要关注，染色用
+                String methodSign = access + name + desc + signature;
                 super.accept(methodNode, methodVisitor);
                 // 合并多版本覆盖率的时候不要走后面addMethodCoverage的流程，只获取到指令覆盖率就行
-                String methodSign = access + name + desc + signature;
                 if (exceptions != null) {
                     for (String s : exceptions) {
                         methodSign += s;
@@ -189,12 +189,12 @@ public class ClassAnalyzer extends ClassProbesVisitor
                         if (isSameMethod) {
                             //合并exec新方案--直接合并两个probes对应的探针
                             Map<String, boolean[]> mergeProbesMap = ExecFileLoader.probesMap.get();
-                            Optional<Instruction> instructionOptional = nowInstructions.values().stream().filter(i -> i.getProbeIndex() > 0).min(Comparator.comparingInt(Instruction::getProbeIndex));
+                            Optional<Instruction> instructionOptional = nowInstructions.values().stream().filter(i -> i.getProbeIndex() >= 0).min(Comparator.comparingInt(Instruction::getProbeIndex));
                             if (probes != null && instructionOptional.isPresent()) {
                                 int probeStrart = instructionOptional.get().getProbeIndex();
-                                int probeEnd = nowInstructions.values().stream().filter(i -> i.getProbeIndex() > 0).max(Comparator.comparingInt(Instruction::getProbeIndex)).get().getProbeIndex();
-                                int mergeProbeStart = mergeInstructionMap.values().stream().filter(i -> i.getProbeIndex() > 0).min(Comparator.comparingInt(Instruction::getProbeIndex)).get().getProbeIndex();
-                                int mergeProbeEnd = mergeInstructionMap.values().stream().filter(i -> i.getProbeIndex() > 0).max(Comparator.comparingInt(Instruction::getProbeIndex)).get().getProbeIndex();
+                                int probeEnd = nowInstructions.values().stream().filter(i -> i.getProbeIndex() >= 0).max(Comparator.comparingInt(Instruction::getProbeIndex)).get().getProbeIndex();
+                                int mergeProbeStart = mergeInstructionMap.values().stream().filter(i -> i.getProbeIndex() >= 0).min(Comparator.comparingInt(Instruction::getProbeIndex)).get().getProbeIndex();
+                                int mergeProbeEnd = mergeInstructionMap.values().stream().filter(i -> i.getProbeIndex() >= 0).max(Comparator.comparingInt(Instruction::getProbeIndex)).get().getProbeIndex();
                                 //jacoco是以方法级别进行插桩的，所以理论上同个方法的探针的长度是一样的
                                 assert probeEnd - probeStrart == mergeProbeEnd - mergeProbeStart;
                                 if (mergeProbesMap != null && mergeProbesMap.containsKey(coverage.getName())) {
