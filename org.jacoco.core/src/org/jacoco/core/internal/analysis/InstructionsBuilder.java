@@ -174,6 +174,7 @@ public class InstructionsBuilder {
 
     void addInstruction(final AbstractInsnNode node, String sign, int probeId) {
         final Instruction insn = new Instruction(currentLine, sign);
+        insn.setProbeIndex(probeId);
         final int labelCount = currentLabel.size();
         if (labelCount > 0) {
             for (int i = labelCount; --i >= 0; ) {
