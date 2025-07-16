@@ -1,72 +1,96 @@
-### 简介
- 
- 最新版本支持自定义数据结构，如请求者IP，以IP划分探针数据，此版本暂时不考虑开源，需付费支持。
+# Jacoco 增强版工具：IP划分与增量覆盖率统计
 
- 
- 基于ray大佬的分支二开，感谢ray佬的无私奉献。jacoco二开，增量覆盖率和不同时间节点的不同class代码覆盖率合并功能。
- 思路请参考博文https://blog.csdn.net/qq_34418450/article/details/135386280?spm=1001.2014.3001.5501
- 这里不再赘述。
- 如果大家不想编译，可以使用从发布版中下载我已经编译好的agent包和cli包
-
-功能说明:如下图，除了按照IP或者其他规则划分覆盖率和精确标记部分分支覆盖功能，过滤通过反射获取到的JacocoData功能，其他功能均已经开源，具体使用说明可以看看wiki，这里不再描述
-
-![输入图片说明](image22.png)
- 
-编译方法:已经去掉了一些不必要的模块和插件，直接执行mvn命令:mvn clean install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true
-使用方法:
-
---diffcode是增量统计，不带则统计全量。可以自己生成这个数据，或者使用ray开源的https://gitee.com/Dray/code-diff获取，支持传入文件参数--diffCodeFiles
---onlyMergeExec=true 不生成报告，仅合并探针数据，生成合并后的exec文件 
---mergeExecfilepath 需要合并的exec探针文件
- --mergeClassfilepath 需要合并的class文件路径
- --mergeExec 探针数据合并后生成新的exec文件路径 
- 
-测试例子，请参考测试类
-org.jacoco.cli.internal.commands.ReportTest.mytest4()
-
-合并探针数据生成exec的例子，建议在项目中引入jacoco-cli包，在代码中直接执行命令模式: 
-		File html = new File("D:\\home");
-		new Main().execute("report", "D:\\jacoco_merge_test.exec", 
-		"--classfiles","D:\\gitworkplace\\luckframeweb\\coverage\\trunk\\616788\\classfiles\\bbzx\\com",
-		"--classfiles","D:\\gitworkplace\\luckframeweb\\coverage\\trunk\\616788\\classfiles\\common\\com",
-		"--classfiles","D:\\gitworkplace\\luckframeweb\\coverage\\trunk\\616788\\classfiles\\reportsupport\\com",
-		"--classfiles","D:\\gitworkplace\\luckframeweb\\coverage\\trunk\\616788\\classfiles\\reportview\\com",
-		"--classfiles","D:\\gitworkplace\\luckframeweb\\coverage\\trunk\\616788\\classfiles\\website\\com",
-        "--mergeExecfilepath","D:\\gitworkplace\\luckframeweb\\coverage\\trunk\\616785_616788\\execfiles\\jacoco20240109165235.exec",
-        "--mergeClassfilepath","D:\\gitworkplace\\luckframeweb\\coverage\\trunk\\616788\\classfiles\\bbzx\\com",
-        "--mergeClassfilepath","D:\\gitworkplace\\luckframeweb\\coverage\\trunk\\616788\\classfiles\\reportview\\com",
-        "--mergeClassfilepath","D:\\gitworkplace\\luckframeweb\\coverage\\trunk\\616788\\classfiles\\common\\com",
-        "--mergeClassfilepath","D:\\gitworkplace\\luckframeweb\\coverage\\trunk\\616788\\classfiles\\reportsupport\\com",
-        "--mergeClassfilepath","D:\\gitworkplace\\luckframeweb\\coverage\\trunk\\616788\\classfiles\\website\\com",
-        "--sourcefiles","D:\\gitworkplace\\luckframeweb\\coverage\\trunk\\616788\\sourcefiles",
-        "--onlyMergeExec", "true",
-        "--mergeExec", "D:\\jacoco_merge_test.exec",
-        "--html", html.getAbsolutePath());
-或者通过jacoco-cli.jar包调用方式，java -jar  jacoco-cli.jar report --diffCode diff  --classfiles classdir --args value等等    
-
-jar包方式执行如下(jdk1.8):
-
-1. 直接生成报告的命令
-java -jar org.jacoco.cli-0.8.7-SNAPSHOT-nodeps.jar report F:\webDemo\exec\2.exec --classfiles F:\webDemo\target\classes\ --mergeExecfilepath F:\webDemo\exec\1.exec --mergeClassfilepath F:\webDemo\classes_1\ --diffCodeFiles F:\home\code_diff\webDemo\1111\diff.json --sourcefiles F:\webDemo\src\main\java --html F:\webDemo\exec\report_diff_2
+基于 ray 大佬分支二次开发的 Jacoco 增强工具，新增按IP（或自定义规则）划分覆盖率、精确标记分支覆盖、过滤反射获取的JacocoData等功能。感谢 ray 佬的开源贡献！核心实现思路参考博文：[《Jacoco 二次开发：增量覆盖率与多版本合并方案》](https://blog.csdn.net/qq_34418450/article/details/135386280?spm=1001.2014.3001.5501)
 
 
-2. 合并exec
-java -jar org.jacoco.cli-0.8.7-SNAPSHOT-nodeps.jar report F:\webDemo\exec\2.exec --classfiles F:\webDemo\target\classes\ --mergeExecfilepath F:\webDemo\exec\1.exec --mergeClassfilepath F:\webDemo\classes_1\ --onlyMergeExec true --mergeExec F:\webDemo\exec\merged.exec
-
-第二次合并, 之前合并的exec文件，mergeClassfilepath参数设置为最后一次合并版本的class路径,举例
-
-合并exec的时候，需要指定 mergeClassfilepath
-现在A.exec 和B.exec 合并 成AB.exec
-此时又来一个C.exec
-AB.exec和C.exec合并的时候， AB.exec 的 mergeClassfilepath 应为B的class文件夹路径
+## 🚀 核心功能
+- **IP/自定义规则划分覆盖率**：支持按请求者IP或其他业务规则拆分覆盖率数据
+- **精确分支覆盖标记**：更细致地标记代码分支的覆盖情况
+- **反射数据过滤**：自动过滤通过反射获取的JacocoData，避免干扰覆盖率统计
+- **增量覆盖率统计**：通过`--diffcode`参数统计指定增量代码的覆盖率（需配合代码差异数据）
+- **多版本探针数据合并**：支持将多个exec文件合并，生成统一的覆盖率报告
+- **全量/增量报告生成**：灵活生成全量覆盖率报告或仅增量代码的覆盖率报告
 
 
+## 📦 快速使用
+无需自行编译，可直接从发布版下载已编译好的`agent包`和`cli包`。
 
-3.生成增量报告
-java -jar org.jacoco.cli-0.8.7-SNAPSHOT-nodeps.jar report F:\webDemo\exec\merged.exec --classfiles F:\webDemo\target\classes --sourcefiles F:\webDemo\src\main\java --html F:\webDemo\exec\report_diff --diffCodeFiles F:\home\code_diff\webDemo\1111\diff.json --encoding=utf8
 
-4.生成全量报告
-java -jar org.jacoco.cli-0.8.7-SNAPSHOT-nodeps.jar report F:\webDemo\exec\merged.exec --classfiles F:\webDemo\target\classes --sourcefiles F:\webDemo\src\main\java --html F:\webDemo\exec\report_full
+## 🔨 编译方法
+若需自定义编译，执行以下Maven命令（已移除冗余模块和插件）：
+```bash
+mvn clean install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true
+```
 
-   如有任何疑问，可以加作者微信群交流    
+
+## 📝 使用说明
+
+### 1. 命令参数说明
+| 参数名 | 作用 |
+|--------|------|
+| `--diffcode` | 启用增量统计（不带则统计全量） |
+| `--diffCodeFiles` | 代码差异数据文件路径（可通过[code-diff](https://gitee.com/Dray/code-diff)生成） |
+| `--onlyMergeExec=true` | 仅合并探针数据，不生成报告 |
+| `--mergeExecfilepath` | 需要合并的exec探针文件路径（可指定多个） |
+| `--mergeClassfilepath` | 对应合并exec文件的class文件路径（可指定多个） |
+| `--mergeExec` | 合并后生成的exec文件路径 |
+| `--classfiles` | 目标class文件路径（可指定多个） |
+| `--sourcefiles` | 源代码文件路径 |
+| `--html` | 生成的HTML报告输出路径 |
+
+
+### 2. 代码调用示例
+在项目中引入jacoco-cli包后，可直接通过代码执行：
+```java
+File htmlReportDir = new File("D:\\coverage-report");
+new Main().execute("report", 
+    "D:\\jacoco_merge_test.exec",  // 基础exec文件
+    "--classfiles", "D:\\project\\target\\classes",  // 目标class文件
+    "--mergeExecfilepath", "D:\\history\\1.exec",    // 需合并的历史exec
+    "--mergeClassfilepath", "D:\\history\\v1\\classes",  // 历史class路径
+    "--sourcefiles", "D:\\project\\src\\main\\java",    // 源代码路径
+    "--onlyMergeExec", "false",  // 生成报告（非仅合并）
+    "--mergeExec", "D:\\merged.exec",  // 合并后的exec输出路径
+    "--diffCodeFiles", "D:\\diff\\diff.json",  // 增量代码差异文件
+    "--html", htmlReportDir.getAbsolutePath()  // HTML报告输出
+);
+```
+
+
+### 3. JAR包执行示例（JDK1.8）
+
+#### 3.1 直接生成带增量统计的报告
+```bash
+java -jar org.jacoco.cli-0.8.7-SNAPSHOT-nodeps.jar report \
+  F:\webDemo\exec\2.exec \
+  --classfiles F:\webDemo\target\classes \
+  --mergeExecfilepath F:\webDemo\exec\1.exec \
+  --mergeClassfilepath F:\webDemo\classes_1 \
+  --diffCodeFiles F:\home\code_diff\diff.json \
+  --sourcefiles F:\webDemo\src\main\java \
+  --html F:\webDemo\exec\report_diff
+```
+
+#### 3.2 仅合并exec文件
+```bash
+java -jar org.jacoco.cli-0.8.7-SNAPSHOT-nodeps.jar report \
+  F:\webDemo\exec\2.exec \
+  --classfiles F:\webDemo\target\classes \
+  --mergeExecfilepath F:\webDemo\exec\1.exec \
+  --mergeClassfilepath F:\webDemo\classes_1 \
+  --onlyMergeExec true \
+  --mergeExec F:\webDemo\exec\merged.exec
+```
+
+#### 3.3 多轮合并注意事项
+- 第一次合并：A.exec + B.exec → AB.exec（`mergeClassfilepath`指定B的class路径）
+- 第二次合并：AB.exec + C.exec → ABC.exec（`mergeClassfilepath`指定C的class路径）
+- 每次合并需保证`mergeClassfilepath`对应最新版本的class文件路径
+
+
+## ❓ 问题交流
+如有任何使用问题，可加入作者微信群交流（扫码或联系作者获取群二维码）。
+
+
+> 注：除IP划分、精确分支覆盖、反射数据过滤外，其他功能已开源，详细使用说明可参考项目wiki。
 ![输入图片说明](image2.png)
