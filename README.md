@@ -20,10 +20,6 @@ IP-based coverage splitting, incremental statistics
 - **精确分支覆盖**：优化分支覆盖标记逻辑，更准确地识别代码分支的执行情况。  
 - **反射数据过滤**：自动过滤通过反射获取的JacocoData，避免干扰覆盖率统计结果。
 
-scences
-
-<img width="923" height="587" alt="image" src="https://github.com/user-attachments/assets/aaf09db8-170c-4cd1-968d-671092e6ade2" />
-
 ## 📥 Quick Access  
 No need to compile—use directly:  
 Download pre-packaged `agent` and `cli` packages from [Releases](https://github.com/chen524266/jacoco-enhanced/releases).  
@@ -45,6 +41,9 @@ mvn clean install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true
 mvn clean install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true
 ```  
 
+scences
+
+<img width="923" height="587" alt="image" src="https://github.com/user-attachments/assets/aaf09db8-170c-4cd1-968d-671092e6ade2" />
 
 ## 📚 Usage Guide  
 
