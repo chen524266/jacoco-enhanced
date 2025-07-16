@@ -1,6 +1,7 @@
 ```markdown
 # jacoco-enhanced  
-A Jacoco-based enhanced tool supporting IP-based coverage splitting, incremental statistics, multi-version probe merging, and more.  
+A Jacoco-based enhanced tool Solving the issue of coverage merging for different class versions,supporting
+IP-based coverage splitting, incremental statistics
 
 基于 Jacoco 二次开发的增强工具，支持按IP划分覆盖率、增量统计、多版本探针数据合并等功能。  
 
@@ -8,17 +9,18 @@ A Jacoco-based enhanced tool supporting IP-based coverage splitting, incremental
 ## 🌟 Core Enhanced Features  
 - **IP/Custom Rule Coverage Splitting**: Split coverage data by requester IP or business rules for scenario-specific analysis.  
 - **Incremental Coverage Statistics**: Calculate coverage only for changed code via diff data (works with [code-diff](https://gitee.com/Dray/code-diff) for diff files).  
-- **Multi-version Exec Merging**: Merge multiple Jacoco exec files to generate unified cross-version coverage data.  
+- **Multi-version Exec Merging**: Merge multiple Jacoco exec files to generate unified cross-version coverage data. Solving the issue of coverage merging for different class versions 
 - **Precise Branch Coverage**: Optimized branch coverage marking for more accurate code branch execution recognition.  
 - **Reflection Data Filtering**: Automatically filter JacocoData obtained via reflection to avoid coverage result interference.  
 
 ## 🌟 核心增强功能  
 - **IP/自定义规则拆分覆盖率**：按请求者IP或业务规则划分覆盖率数据，精准定位不同场景的覆盖情况。  
 - **增量覆盖率统计**：通过代码差异数据，仅统计指定增量代码的覆盖率（需配合[code-diff](https://gitee.com/Dray/code-diff)生成差异文件）。  
-- **多版本探针合并**：支持合并多个Jacoco exec文件，生成跨版本的统一覆盖率数据。  
+- **多版本探针合并**：支持合并多个Jacoco exec文件，生成跨版本的统一覆盖率数据,解决不同classid版本的覆盖率合并问题 
 - **精确分支覆盖**：优化分支覆盖标记逻辑，更准确地识别代码分支的执行情况。  
 - **反射数据过滤**：自动过滤通过反射获取的JacocoData，避免干扰覆盖率统计结果。  
 
+<img width="501" height="263" alt="d4c002c6fe16cb7abd7cb2698947bca" src="https://github.com/user-attachments/assets/231b1898-e4e7-4a43-a6ef-38e892cf4bec" />
 
 ## 📥 Quick Access  
 No need to compile—use directly:  
