@@ -18,17 +18,19 @@ IP-based coverage splitting, incremental statistics
 - **增量覆盖率统计**：通过代码差异数据，仅统计指定增量代码的覆盖率（需配合[code-diff](https://gitee.com/Dray/code-diff)生成差异文件）。  
 - **多版本探针合并**：支持合并多个Jacoco exec文件，生成跨版本的统一覆盖率数据,解决不同classid版本的覆盖率合并问题 
 - **精确分支覆盖**：优化分支覆盖标记逻辑，更准确地识别代码分支的执行情况。  
-- **反射数据过滤**：自动过滤通过反射获取的JacocoData，避免干扰覆盖率统计结果。  
+- **反射数据过滤**：自动过滤通过反射获取的JacocoData，避免干扰覆盖率统计结果。
 
-<img width="501" height="263" alt="d4c002c6fe16cb7abd7cb2698947bca" src="https://github.com/user-attachments/assets/231b1898-e4e7-4a43-a6ef-38e892cf4bec" />
+scences
+
+<img width="923" height="587" alt="image" src="https://github.com/user-attachments/assets/aaf09db8-170c-4cd1-968d-671092e6ade2" />
 
 ## 📥 Quick Access  
 No need to compile—use directly:  
-Download pre-packaged `agent` and `cli` packages from [Releases](https://github.com/your-username/jacoco-enhanced/releases).  
+Download pre-packaged `agent` and `cli` packages from [Releases](https://github.com/chen524266/jacoco-enhanced/releases).  
 
 ## 📥 快速获取  
 无需编译可直接使用：  
-从 [Releases](https://github.com/你的用户名/jacoco-enhanced/releases) 下载已打包的 `agent包` 和 `cli包`。  
+从 [Releases](https://github.com/chen524266/jacoco-enhanced/releases) 下载已打包的 `agent包` 和 `cli包`。  
 
 
 ## 🔨 Compilation Guide  
